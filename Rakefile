@@ -1,80 +1,30 @@
-require 'fileutils'
+require 'rubygems'
+require 'rake'
+require 'rake/rdoctask'
 
-task :default do
-  sh 'ruby186 test/assert2_rjs_suite.rb'
-  sh 'ruby186 test/assert2_rjs_spec.rb'
-  
-  sh 'ruby186 test/rubynode_reflector_suite.rb'
-#  sh 'ruby190 test/ripper_reflector_suite.rb'
-  sh 'ruby191 test/ripper_reflector_suite.rb'
-  
-  sh 'ruby186 test/assert2_suite.rb'
-#  sh 'ruby190 test/assert2_suite.rb'
-  sh 'ruby191 test/assert2_suite.rb'
-  
-  sh 'ruby186 test/assert2_xpath_suite.rb'
-  sh 'ruby186 test/assert2_xhtml_suite.rb'
-#  sh 'ruby187 test/assert2_xpath_suite.rb'
-#  sh 'ruby190 test/assert2_xpath_suite.rb'
-#  sh 'ruby191 test/assert2_xpath_suite.rb'  #  TODO  get that back online
-#  sh 'ruby191 test/assert2_xhtml_suite.rb'
-  
-  sh 'ruby186 test/assert2_utilities_suite.rb'
-#  sh 'ruby187 test/assert2_utilities_suite.rb'
-#  sh 'ruby190 test/assert2_utilities_suite.rb'
-  sh 'ruby191 test/assert2_utilities_suite.rb'
-  
-#  sh 'ruby190 test/ripdoc_suite.rb'
-#  sh 'ruby191 test/ripdoc_suite.rb'
-  
-  # assert2_spec.rb   
- 
-# TODO  solve MiniTest too!
- 
-#  #sh 'ruby186 test/assert2_shoulda_suite.rb'
-
+desc 'Generate documentation'
+Rake::RDocTask.new(:rdoc) do |rdoc|
+  rdoc.rdoc_dir = 'rdoc'
+  rdoc.title    = 'vihai-assert2'
+  rdoc.options << '--line-numbers' << '--inline-source'
+  rdoc.rdoc_files.include('README', 'NOTICE')
+  rdoc.rdoc_files.include('lib/assert2.rb')
+  rdoc.rdoc_files.include('lib/assert2/**/*.rb')
 end
 
-task :int => :default do
-  sh 'svn commit --message development'
+
+begin
+  require 'jeweler'
+
+  Jeweler::Tasks.new do |s|
+    s.name = 'vihai-assert2'
+    s.summary = 'rspec expectations for XML/HTML'
+    s.email = 'daniele@orlandi.com'
+    s.homepage = 'http://www.orlandi.com/'
+    s.description = 'rspec expectations for XML/HTML'
+    s.authors = ['Daniele Orlandi']
+    s.files = FileList['[A-Z]*.*', '{lib}/**/*', 'VERSION']
+  end
+rescue LoadError
+  puts 'Jeweler not available. Install it with: sudo gem install jeweler -s http://gemcutter.org'
 end
-
-task :zip => :default do
-  sh 'zip assert21.zip -f'
-end
-
-task :todo do
-  sh 'find . -name \*rb | xargs grep TODO'
-end
-
-task :fixme do
-  sh 'find . -name \*rb | xargs grep FIXME'
-end
-
-task :fixme_files do
-  sh 'find . -name \*rb | xargs grep FIXME -l'
-end
-
-desc 'send docs to rubyforge.org'
-task :publish do
- # sh 'scp -r rdoc/* phlip@assertxpath.rubyforge.org:/var/www/gforge-projects/assertxpath/'
-  sh 'rsync -av -e ssh --exclude "*.svn" doc/* phlip@assert2.rubyforge.org:/var/www/gforge-projects/assert2/'
-end
-
-# TODO  learn and install and use this!
-#~ ruby crash.rb
-#~ crash.rb:6:in `go2': unhandled exception
-        #~ from crash.rb:11:in `go'
-        #~ from crash.rb:15
-
-#~ The new backtracer, however:
-
-#~ ruby -rbacktracer crash.rb
-
-#~ unhandled exception: crash.rb:6:   raise
-        #~ locals: {"a"=>"3", "b"=>3, "within_go2"=>4}
-          #~ from:
-        #~ crash.rb:1 go2(a=>3, b=>55)
-                #~ locals: {"a"=>"3", "b"=>3, "within_go2"=>4}
-        #~ crash.rb:8 go(a=>3)
-                #~ locals: {"a"=>"3", "within_go"=>2}
