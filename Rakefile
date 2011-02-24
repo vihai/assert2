@@ -1,4 +1,3 @@
-require 'psych'
 require 'rubygems'
 require 'rake'
 require 'rake/rdoctask'

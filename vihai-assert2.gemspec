@@ -3,8 +3,6 @@
 # Instead, edit Jeweler::Tasks in Rakefile, and run 'rake gemspec'
 # -*- encoding: utf-8 -*-
 
-require 'psych'
-
 Gem::Specification.new do |s|
   s.name = %q{vihai-assert2}
   s.version = "0.6.1"
